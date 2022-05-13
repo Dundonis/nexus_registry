@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 10s
+
+rule_files:
+  - alert.yml
+
+scrape_configs:
+  - job_name: services
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 'prometheus:9090'
+
+  - job_name: nexus
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /service/metrics/prometheus
+    scheme: http
+    basic_auth:
+      username: admin
+      password: 14af743f-a0db-44ff-a0a4-6649ef56d5fb
+    static_configs:
+    - targets:
+        - 'nexus:8081'
+
+  - job_name: nginx
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets:
+        - 'nginx-exporter:9113'
